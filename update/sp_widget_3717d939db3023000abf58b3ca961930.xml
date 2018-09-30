@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>custom</category>
+        <client_script><![CDATA[function($scope, $location, $rootScope, spUtil, $interpolate) {
+  /* widget contrller */
+  var c = this;
+	
+
+
+		}
+]]></client_script>
+        <controller_as>c</controller_as>
+        <css>.navbar-inverse .navbar-nav &gt; li &gt; a:hover {
+  
+ background-color:#010032;
+  color:blue;
+}
+
+
+
+.SecondMenu{
+  width: 100%;
+}
+
+.navbar-inverse{
+ background-color:#000030;
+  border: none!important;
+  margin-top: 10px;
+}
+
+.navbar-brand{
+  font-size: 23px;
+    font-weight: bolder;
+}
+
+.navbar-nav &gt; li &gt; a {
+  color: white;
+}
+
+.divider{
+  width: 90%;
+}
+
+.mega-dropdown {
+  position: static !important;
+  color: black;
+ 
+}
+
+.navbar-inverse .navbar-nav &gt; li &gt; a {
+  font-size: 16px;
+  color: white;
+}
+
+
+.navSearch{
+    padding-top: 8px;
+    width: 380px;
+}
+
+
+
+.mega-dropdown-menu &gt; li &gt; ul {
+border-right:1px solid #999;
+  padding: 0;
+  margin: 0;
+  
+}
+
+.mega-dropdown-menu &gt; li &gt; ul &gt; li {
+  list-style: none;
+}
+
+.mega-dropdown-menu &gt; li &gt; ul &gt; li &gt; a {
+  display: block;
+ color: black;
+  padding: 3px 5px;
+  font-size: 16px;
+  
+}
+.mega-dropdown-menu &gt; li ul &gt; li &gt; a:hover,
+.mega-dropdown-menu &gt; li ul &gt; li &gt; a:focus {
+   color: Red;
+  text-decoration: none;
+}
+.dropdown-menu .dropdown-header {
+  font-size: 16px;
+  color: Red;
+  padding: 5px 5px 5px 5px;
+  line-height: 30px;
+  margin: 2px -15px 0;
+
+}
+
+.carousel-control {
+  width: 30px;
+  height: 30px;
+  top: -35px;
+
+}
+.left.carousel-control {
+  right: 30px;
+  left: inherit;
+}
+.carousel-control .glyphicon-chevron-left, 
+.carousel-control .glyphicon-chevron-right {
+  font-size: 12px;
+  background-color: red;
+  line-height: 30px;
+  text-shadow: none;
+  color: #333;
+  border: 1px solid #ddd;
+}
+
+#menCollection{
+  margin-right: 15px;
+}
+
+.myd{
+  text-align: right;
+  margin-right: 45px;
+  margin-top: 10px; 
+}
+
+
+.megamenudropdown{
+  background-color:  #000035;
+}
+
+.megamenudropdown &gt; li &gt; a {
+	color: white;
+  text-decoration: none;
+}
+
+.megamenudropdown &gt; li &gt; a:hover,
+.megamenudropdown &gt; li &gt; a:focus {
+   color: black;
+  text-decoration: none;
+}
+.dropdown-header1 {
+  font-size: 16px;
+  color: Red;
+  padding: 5px 5px 5px 38px;
+  line-height: 30px;
+}
+.navbar-nav&gt;li&gt; .dropdown-menu {
+  margin-right:-16px;
+}
+
+</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>false</has_preview>
+        <id>csc_megamenu_ravi</id>
+        <internal>false</internal>
+        <link/>
+        <name>CSC Megamenu Ravi</name>
+        <option_schema/>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function() {
+	if(gs.hasRole('itil') || gs.hasRole('support')){
+		data.showicons=true;
+	}
+	
+	data.showBoldChat = true;
+	data.ShowMultiSwith = false;
+  /* populate the 'data' object */
+  /* e.g., data.table = $sp.getValue('table'); */
+	var myuser = gs.getUser().getID();
+	var gu = new GlideRecord("sys_user");
+	gu.addQuery('sys_id', myuser);
+	gu.query();
+		while (gu.next())
+		{
+			data.usrComSysID = gu.getValue('company');
+				//gs.addErrorMessage(data.usrComSysID);
+		}
+			
+		
+	
+	var id = myuser.getCompanyID();
+//gs.addInfoMessage(data.usrComSysID);
+	//data.usrComSysID = myuser;
+	//data.usrComSysID = gs.getUser().getRecord().getValue("company.name");
+	var gr = new GlideRecord("core_company");
+	gr.addQuery("sys_id", data.usrComSysID);
+	gr.query();
+	while (gr.next())
+		{
+			var validateImage = gr.getDisplayValue("banner_image");
+			if(validateImage){
+				data.ifValid = true;
+	data.imgURL = "https://unisysmtdev.service-now.com/" + gr.getDisplayValue("banner_image");
+	//gr.('data.imgURL' + "usrComSysID");
+		}
+	else{
+		data.ifValid = false;
+	}
+		}
+	
+	var mps = new GlideRecord("u_sm_multi_portal_select");
+	mps.addQuery("u_company", data.usrComSysID);
+	mps.query();
+	if(mps.next())
+		{
+			
+			var link1 = mps.getValue("u_link1_url");
+				if (link1){
+					data.isLink1=true;
+					data.link1Name = mps.getDisplayValue("u_link1_name");
+					data.link1URL = mps.getDisplayValue("u_link1_url");
+					data.link1Role = mps.getDisplayValue("u_link1_role");
+				}
+			var link2 = mps.getValue("u_link2_url");
+		   // gs.addInfoMessage("Before: Link2: "+link2);
+				if (link2){
+					data.isLink2=true;
+					data.link2Name = mps.getDisplayValue("u_link2_name");
+					data.link2URL = mps.getDisplayValue("u_link2_url");
+					
+				}
+			
+			
+			if((data.isLink1==true)||(data.isLink2==true))
+				data.ShowMultiSwith = true;
+			//data.usrComName = mps.getValue("u_company");
+			//gs.addErrorMessage("MultiCompany Record Found" +data.usrComName);
+		}
+	else
+	{
+		//gs.addInfoMessage("MultiCompany Record NOT Found..!");
+	}
+	
+	var myUserObject = gs.getUser();
+	data.userName = myUserObject.getFullName();
+	data.userEmail = myUserObject.getEmail();
+	data.mobile = myUserObject.getMobileNumber();
+	data.BCID = "";
+	if (data.usrComSysID == "8ddb3ed337560780ddf983dcb3990ecf" )
+	{
+		//gs.addErrorMessage("Nutreco");
+		data.BCID = "3763286451440643626";
+	}
+	else if (data.usrComSysID == "60d6cff70fea0380ffd5ad7d51050eec" )
+		{
+			//gs.addErrorMessage("Constellium");
+			data.BCID = "2727972173764701495";
+		}
+	else if (data.usrComSysID == "97abbf6d0f074200ac0e22d8b1050ebb")
+		{
+			//gs.addErrorMessage("Unisys");
+			data.BCID = "852431632631040349";
+			
+		}
+	else if (data.usrComSysID == "83028d04f5cfa00d35a0f5d0210c789" )
+		{
+			//gs.addErrorMessage("Unisys");
+			data.BCID = "852431632631040349";
+			
+		}
+	
+	else{
+		//gs.addErrorMessage("Not one of Nutreco/Constellium");
+		data.BCID = "852431632631040349";
+	}
+	
+	
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2018-09-27 18:13:14</sys_created_on>
+        <sys_id>3717d939db3023000abf58b3ca961930</sys_id>
+        <sys_mod_count>1</sys_mod_count>
+        <sys_name>CSC Megamenu Ravi</sys_name>
+        <sys_package display_value="NeedIt" source="x_58872_needit">6ead8e780f603200cd674f8ce1050ed1</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="NeedIt">6ead8e780f603200cd674f8ce1050ed1</sys_scope>
+        <sys_update_name>sp_widget_3717d939db3023000abf58b3ca961930</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2018-09-28 02:05:47</sys_updated_on>
+        <template><![CDATA[<script>
+$(document).ready(function(){
+    $(".dropdown").hover(            
+        function() {
+            $('.dropdown-menu', this).not('.in .dropdown-menu').stop(true,true).slideDown("400");
+            $(this).toggleClass('open');        
+        },
+        function() {
+            $('.dropdown-menu', this).not('.in .dropdown-menu').stop(true,true).slideUp("400");
+            $(this).toggleClass('open');       
+        }
+    );
+});
+</script>
+<div class="dashboardh">
+  
+
+<div class="containera" style="width: 100%;">  
+  <nav class="navbar navbar-inverse YHMegaMenu">
+   
+    
+    <div class="navbar-header">
+    	<button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".js-navbar-collapse">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		</button>
+       
+<!--	<a class="navbar-brand" href=" " style="color: white; font-style: bold;">  Service Management    </a> -->
+	</div>
+	
+	<div class="collapse navbar-collapse js-navbar-collapse">
+    <ul class="nav navbar-nav">
+      
+       <li class="dropdown">
+             <a href=" "  ng-show ="{{data.ShowMultiSwith}}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> <i class="fa fa-external-link" aria-hidden="true"></i> <span class="caret"></span></a>
+     <ul class="dropdown-menu megamenudropdown" role="menu">
+       <li ng-show ="{{data.isLink1==true}}"><a  ng-href="{{::data.link1URL}}" target="_blank"> {{data.link1Name}} Portal</a></li>
+       <li ng-show ="{{data.isLink2==true}}"><a  ng-href="{{::data.link2URL}}" target="_blank"> {{data.link2Name}} Portal</a></li>
+     
+           
+          </ul>
+      
+      
+      <li><a href="/csc"><span class="glyphicon glyphicon-home"></span>About</a></li>
+      <li><a href="/csc"><span class="glyphicon glyphicon-search"></span>Admission</a></li>
+      <li class="dropdown">
+      <a href=" " class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="glyphicon glyphicon-wrench" aria-hidden="true"></i>  Admission  </a>
+      
+       <ul class="dropdown-menu megamenudropdown" role="menu">
+          <li class="dropdown-header"><a target="_blank" href="/$pwd_enrollment_form_container.do">MBA</a></li>
+          <li class="dropdown-header"><a target="_blank" href="/$pwd_reset.do?sysparm_url=CSC_PWD_Reset">MCA</a></li>
+           <li class="dropdown-header"><a target="_blank" href="/$pwd_reset.do?sysparm_url=CSC_PWD_Reset">Engineering</a></li>
+           <li class="dropdown-header"><a target="_blank" href="/$pwd_reset.do?sysparm_url=CSC_PWD_Reset">Diploma</a></li>
+      <li><a href="/csc"><span class="glyphicon glyphicon-search"></span>Principal</a></li>
+       <li class="dropdown">
+      <a href=" " class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="glyphicon glyphicon-wrench" aria-hidden="true"></i>  Departments  </a>
+      
+       <ul class="dropdown-menu megamenudropdown" role="menu">
+          <li class="dropdown-header"><a target="_blank" href="/$pwd_enrollment_form_container.do">Civil</a></li>
+          <li class="dropdown-header"><a target="_blank" href="/$pwd_reset.do?sysparm_url=CSC_PWD_Reset">Mechanical</a></li>
+         <li class="dropdown-header"><a target="_blank" href="/$pwd_reset.do?sysparm_url=CSC_PWD_Reset">Electronics</a></li>
+         <li class="dropdown-header"><a target="_blank" href="/$pwd_reset.do?sysparm_url=CSC_PWD_Reset">Electrical</a></li>
+         <li class="dropdown-header"><a target="_blank" href="/$pwd_reset.do?sysparm_url=CSC_PWD_Reset">Aeronautical</a></li>
+      <li ng-show= "{{data.showicons}}"><a href="https://dev66165.service-now.com/nav_to.do" target="_blank"><i class="glyphicon glyphicon-tags" aria-hidden="true"></i> Service Management  </a></li>
+    <!--  <li><a  ng-href=" " onClick="window.open('https://unisysmtdev.service-now.com/$chat_support.do?queueID=848527a50f918bc0ffd5ad7d51050e51','HelpDesk Chat','directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=400,height=550'); return false;" class="top_icon {{::options.class_name}}">
+ 
+      
+  <i class="fa fa-comments-o" aria-hidden="true" ></i> Chat  </a></li>   -->
+      
+      <li class="dropdown">
+      <a href=" " class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="glyphicon glyphicon-wrench" aria-hidden="true"></i>  Password Reset  </a>
+      
+       <ul class="dropdown-menu megamenudropdown" role="menu">
+          <li class="dropdown-header"><a target="_blank" href="/$pwd_enrollment_form_container.do">Register for Password Reset</a></li>
+          <li class="dropdown-header"><a target="_blank" href="/$pwd_reset.do?sysparm_url=CSC_PWD_Reset">Password Reset</a></li>
+
+         
+          <!--  <li><a href="">Create a change requeust</a></li> -->
+         <!--   <li class="divider"></li>
+            <li><a href="/sm?id=sm_tickets">Review requests</a></li>
+            <li class="divider"></li>
+          <li><a href="/sm?id=sm_surveys">Complete survey</a></li> -->
+          </ul>
+        </li>
+	
+      
+   <!--   <li><a href="/sm/?id=sm_alerts"><i class="fa fa-bullhorn" aria-hidden="true"></i>  Alerts  </a></li>
+      <li><a href="/sm/?id=approvals"><i class="fa fa-check-square-o" aria-hidden="true"></i>  Approvals  </a></li> -->
+     
+	<!-- <li><a href="/sm?id=kb_home2"><span class="glyphicon glyphicon-search"> </span> Self Help</a></li> -->
+ <!--     <li><a ng-href=" " onClick="window.open('/$chat_support.do?queueID=848527a50f918bc0ffd5ad7d51050e51','HelpDesk Chat','directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=400,height=550'); return false;"><i class="fa fa-comments-o" aria-hidden="true"></i>  Chat</a></li> -->
+  
+     
+      
+<!--    <li><a href="/sm?id=sm_dashboards"><i class="fa fa-bar-chart" aria-hidden="true"></i>  Dashboards  </a></li> 
+      
+      <li ng-show= "{{data.showicons}}"><a href="/navpage.do"><i class="glyphicon glyphicon-tags" aria-hidden="true"> </i>&nbsp; Now Platform  </a></li> -->
+			
+      	 
+           
+         
+		</ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li class="dropdown">
+      <a href=" " class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="glyphicon glyphicon-bell" aria-hidden="true"></i> Notifications </a>
+      
+       <ul class="dropdown-menu megamenudropdown" role="menu">
+          <li class="dropdown-header1"><a target="_blank" href="/$pwd_enrollment_form_container.do">  Read</a></li>
+          <li class="dropdown-header1"><a target="_blank" href="/$pwd_reset.do?sysparm_url=CSC_PWD_Reset">  Unread</a></li>
+         
+       
+         <!-- <li class="navSearch"> <widget rectangle="typeahead_search_header"></widget></li>  -->
+          
+        <li><div class="myd" ng-if="data.ifValid">
+  <img src="{{data.imgURL}}"> 
+
+</div>
+            </li> 
+      </ul>
+	</div>
+    <!-- /.nav-collapse -->
+  </nav>
+</div>
+<!--<div class="mainimg"><img id="mainimage" src="Andersenmain.jpg" width="100%" height="250px;"/></div>  -->
+</div>]]></template>
+    </sp_widget>
+</record_update>
